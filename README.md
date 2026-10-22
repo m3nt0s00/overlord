@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/reggieog01-cpu/overlord/main/Overlord-Server/public/assets/overlord.png" alt="Overlord" width="280" />
+  <img src="https://raw.githubusercontent.com/m3nt0s00/overlord/main/Overlord-Server/public/assets/overlord.png" alt="Overlord" width="280" />
 </p>
 
 # Overlord
@@ -8,7 +8,7 @@
 
 Hello, I made this project for fun.
 
-The canonical repository is [GitHub](https://github.com/reggieog01-cpu/overlord).
+The canonical repository is [GitHub](https://github.com/m3nt0s00/overlord).
 
 The server is TypeScript on Node/Bun. The client is Go. Operators talk to the server through a web panel or the Electron desktop app, and agents connect over encrypted WebSockets.
 
@@ -122,7 +122,7 @@ docker compose version
 **2. Get the project**
 
 ```powershell
-git clone https://github.com/reggieog01-cpu/overlord.git
+git clone https://github.com/m3nt0s00/overlord.git
 cd Overlord
 ```
 
@@ -169,8 +169,37 @@ docker compose -f docker-compose.windows.yml down
 
 ### Linux
 
+**Copy-paste VPS setup (Debian / Ubuntu / Kali):** paste this whole block into
+your VPS terminal as root (or a sudo user). It installs Docker, downloads the
+Compose file, starts Overlord, and prints your one-time admin password and
+panel URL at the end.
+
+```bash
+# --- Overlord VPS one-shot setup ---
+# 1. Install Docker (official convenience script)
+curl -fsSL https://get.docker.com | sudo sh
+
+# 2. Create a folder and grab the Compose file
+mkdir -p ~/overlord && cd ~/overlord
+curl -fsSL -O https://raw.githubusercontent.com/m3nt0s00/overlord/main/docker-compose.yml
+
+# 3. Start Overlord
+sudo docker compose up -d
+
+# 4. Wait for first boot, then show the one-time admin password
+sleep 15
+sudo docker compose exec overlord-server grep bootstrapPassword /app/data/save.json
+
+# 5. Show your panel URL
+echo "Open: https://$(curl -fsSL ifconfig.me):5173  (user: admin)"
+```
+
+Sign in as `admin` with the password printed after `bootstrapPassword`. The
+first login forces a password change, after which the plaintext bootstrap
+password is removed from `save.json`. Keep `save.json` private and back it up.
+
 <details>
-<summary>Step-by-step: Linux (Debian / Ubuntu / Kali)</summary>
+<summary>Step-by-step alternative: Linux (Debian / Ubuntu / Kali)</summary>
 <br>
 
 **1. Install Docker**
@@ -220,14 +249,14 @@ Make a folder for it, drop in the file, and you're done:
 
 ```bash
 mkdir overlord && cd overlord
-wget https://raw.githubusercontent.com/reggieog01-cpu/overlord/main/docker-compose.yml
+wget https://raw.githubusercontent.com/m3nt0s00/overlord/main/docker-compose.yml
 ```
 
 No `wget`? Use `curl`:
 
 ```bash
 mkdir overlord && cd overlord
-curl -O https://raw.githubusercontent.com/reggieog01-cpu/overlord/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/m3nt0s00/overlord/main/docker-compose.yml
 ```
 
 **3. Start it**
@@ -238,13 +267,13 @@ docker compose up -d
 
 The Compose file itself is downloaded from the canonical GitHub repository,
 and the default image is pulled from GitHub Container Registry at
-`ghcr.io/reggieog01-cpu/overlord:latest`.
+`ghcr.io/m3nt0s00/overlord:latest`.
 
 Maintainers can publish a matching multi-architecture GHCR image from the
-[overlord-ci workflow](https://github.com/reggieog01-cpu/overlord/actions/workflows/docker-publish.yml).
+[overlord-ci workflow](https://github.com/m3nt0s00/overlord/actions/workflows/docker-publish.yml).
 Select **Run workflow** and enter the version currently declared by the server
 and agent (for example, `3.1.0`). The workflow publishes version, major/minor,
-major, and `latest` tags to `ghcr.io/reggieog01-cpu/overlord`. Keep the package
+major, and `latest` tags to `ghcr.io/m3nt0s00/overlord`. Keep the package
 visibility public so Compose can pull it without GitHub authentication.
 
 **4. Get the initial password**
@@ -316,7 +345,7 @@ docker compose version
 **2. Get the project**
 
 ```bash
-git clone https://github.com/reggieog01-cpu/overlord.git
+git clone https://github.com/m3nt0s00/overlord.git
 cd Overlord
 ```
 
